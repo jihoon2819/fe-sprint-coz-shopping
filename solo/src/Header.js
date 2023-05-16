@@ -1,13 +1,13 @@
 import React from 'react';
 import {useState} from 'react';
-import { BrowserRouter,Link } from "react-router-dom";
+import {Link } from "react-router-dom";
 
 
 const Header = () => {
-    const [isOpen,setMenu] = useState(false);
+    const [isOpen,setIsOpen] = useState(false);
 
     const buggerOnOff = ()=>{
-        setMenu(!isOpen);
+      setIsOpen(!isOpen);
     };
     
   return( 
