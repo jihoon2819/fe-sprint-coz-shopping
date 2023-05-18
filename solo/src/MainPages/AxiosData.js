@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function AxiosData() {
+function AxiosData({url}) {
   const [inputData, setInputData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://cozshopping.codestates-seb.link/api/v1/products');
+        const response = await axios.get(url);
         const fetchedData = response.data.map(data => ({
           id: data.id,
           type: data.type,
@@ -31,27 +31,72 @@ function AxiosData() {
   }, []);
 
   return (
-    <div>
-      <h2>상품 리스트</h2>
-      <ul className="main_product_list">
-        {inputData.map(data => (
-          <li className="list_box" key={data.id}>
-            <div>
-              <img src={data.image_url} alt={data.title} />
-              <div></div>
-            </div>
-            <div>
-              <div>{data.title}</div>
-              <div>{data.discountPercentage}</div>
-            </div>
-            <div>
-              <div></div>
-              <div>{data.price}</div>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <ul className='product-list'>
+      {inputData.map((product) => {
+        switch (product.type) {        
+          case 'Product':
+            return (
+              <li key={product.id} className='list_box'>
+                <img className="product_img" src={product.image_url} alt={product.title} />
+                <div
+
+                  className=
+                  "star"
+                />
+                <div className='product-box'>
+                  <p className='title'>{product.title}</p>
+                  <p className='discount-percentage'>{product.discountPercentage} %</p>
+                </div>
+                <div className='price'>{product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} 원</div>
+              </li>
+            );
+          case 'Category':
+            return (
+              <li key={product.id} className='list_box'>
+                <img className="product_img" src={product.image_url} alt={product.title} />
+                <div
+                  className=
+                  "star"
+                />
+                <div className='content-box'>
+                  <p className='title'># {product.title}</p>
+                </div>
+              </li>
+            );
+          case 'Exhibition':
+            return (
+              <li key={product.id} className='list_box'>
+                <img className="product_img" src={product.image_url} alt={product.title} />
+                <div
+                  className=
+                  "star"
+                />
+                <div className='content-box'>
+                  <p className='title'>{product.title}</p>
+                  <div className='sub_title'>{product.sub_title}</div>
+                </div>
+              </li>
+            );
+          case 'Brand':
+            return (
+              <li key={product.id} className='list_box'>
+                <img className="product_img" src={product.brand_image_url} alt={product.title} />
+                <div
+                  className="star" />
+                <div className='brand-box'>
+                  <p className='title'>{product.brand_name}</p>
+                  <div className='follower'>
+                    <p className='follower_title'>관심 고객 수</p>
+                    <p className='follower_num'>{product.follower.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
+                  </div>
+                </div>
+              </li>
+            );
+          default:
+            return null;
+        }
+      })}
+    </ul>
   );
 }
 
